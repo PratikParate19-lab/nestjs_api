@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Customer } from './interfaces/customer.interface';
@@ -17,6 +17,9 @@ export class CustomerService {
   // Get a single customer
   async getCustomer(customerID): Promise<Customer> {
     const customer = await this.customerModel.findById(customerID).exec();
+    if (!customer) {
+      throw new HttpException('not found', HttpStatus.NOT_FOUND);
+    }
     return customer;
   }
   // post a single customer
@@ -29,13 +32,14 @@ export class CustomerService {
     customerID,
     createCustomerDTO: CreateCustomerDTO,
   ): Promise<Customer> {
-    console.log('customerID', customerID);
-    console.log('customerID', createCustomerDTO);
     const updatedCustomer = await this.customerModel.findByIdAndUpdate(
       customerID,
       createCustomerDTO,
       { new: true },
     );
+    if (!updatedCustomer) {
+      throw new HttpException('not found', HttpStatus.NOT_FOUND);
+    }
     return updatedCustomer;
   }
   // Delete a customer
@@ -43,6 +47,9 @@ export class CustomerService {
     const deletedCustomer = await this.customerModel.findByIdAndRemove(
       customerID,
     );
+    if (!deletedCustomer) {
+      throw new HttpException('not found', HttpStatus.NOT_FOUND);
+    }
     return deletedCustomer;
   }
 }

@@ -10,18 +10,24 @@ import {
   NotFoundException,
   Delete,
   Param,
+  UsePipes,
+  Logger,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDTO } from './dto/create-customer.dto';
+import { ValidationPipe } from '../shared/validation.pipe';
 
 @Controller('customer')
 export class CustomerController {
+  private logger = new Logger('CustomerController');
   constructor(private customerService: CustomerService) {}
 
   // add a customer
   @Post('/create')
+  @UsePipes(new ValidationPipe())
   async addCustomer(@Res() res, @Body() createCustomerDTO: CreateCustomerDTO) {
     const customer = await this.customerService.addCustomer(createCustomerDTO);
+    this.logger.log(JSON.stringify(createCustomerDTO));
     return res.status(HttpStatus.OK).json({
       message: 'Customer has been created successfully',
       customer,
@@ -45,13 +51,12 @@ export class CustomerController {
     return res.status(HttpStatus.OK).json(customer);
   }
   @Put('/update')
+  @UsePipes(new ValidationPipe())
   async updateCustomer(
     @Res() res,
     @Query('customerID') customerID,
     @Body() createCustomerDTO: CreateCustomerDTO,
   ) {
-    console.log('customerID', customerID);
-    console.log('customerID', createCustomerDTO);
     const customer = await this.customerService.updateCustomer(
       customerID,
       createCustomerDTO,
@@ -59,6 +64,7 @@ export class CustomerController {
     if (!customer) {
       throw new NotFoundException('Customer does not exist!');
     }
+    this.logger.log(JSON.stringify(createCustomerDTO));
     return res.status(HttpStatus.OK).json({
       message: 'Customer has been successfully updated',
       customer,
