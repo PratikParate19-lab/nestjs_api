@@ -1,5 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+// import { ApolloServer, gql } from 'apollo-server';
+import AllInfo from './Endpoints/getall';
+import Info from './Endpoints/info';
 import {
   ClientProxy,
   ClientProxyFactory,
@@ -10,7 +13,21 @@ import {
 export class AppController {
   private readonly client: ClientProxy;
 
-  constructor(private readonly appService: AppService) {
+  // typeDefs = gql`
+  //   type Query {
+  //     hello: String!
+  //   }
+  // `;
+  // resolvers = {
+  //   Query: {
+  //     hello: () => 'hello world',
+  //   },
+  // };
+  constructor(
+    private readonly appService: AppService,
+    private readonly allInfo: AllInfo,
+    private readonly info: Info,
+  ) {
     this.client = ClientProxyFactory.create({
       transport: Transport.TCP,
       options: {
@@ -20,12 +37,13 @@ export class AppController {
     });
   }
 
+  // server = new ApolloServer({ typeDefs, resolvers });
   @Get('all')
   getMovies() {
-    return this.client.send<string[]>({ cmd: 'LIST_MOVIES' }, []);
+    return this.client.send<string[]>({ cmd: this.allInfo.getMovie() }, []);
   }
   @Get('rate')
   getRating() {
-    return this.client.send<string[]>({ cmd: 'rating' }, []);
+    return this.client.send<string[]>({ cmd: this.info.getRating() }, []);
   }
 }

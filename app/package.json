@@ -22,8 +22,13 @@
   "dependencies": {
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
+    "@nestjs/graphql": "^6.5.3",
     "@nestjs/microservices": "^6.2.3",
     "@nestjs/platform-express": "^6.0.0",
+    "apollo-datasource-rest": "^0.6.6",
+    "apollo-server-express": "^2.9.7",
+    "graphql": "^14.5.8",
+    "graphql-tools": "^4.0.6",
     "multiple-redis": "^1.2.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
