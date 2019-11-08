@@ -1,0 +1,10 @@
+app/node_modules/
+app/nodemon-debug.json
+movies-microservice/node_modules/
+movies-microservice/nodemon-debug.json
+movies-microservice/.vscode/
+movies-microservice/dist/
+rating-services/node_modules/
+rating-services/nodemon-debug.json
+rating-services/.vscode/
+rating-services/dist/
