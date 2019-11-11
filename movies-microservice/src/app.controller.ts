@@ -6,7 +6,7 @@ import { MessagePattern } from '@nestjs/microservices';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @MessagePattern({cmd: 'LIST_MOVIES'})
+  @MessagePattern({ cmd: 'LIST_MOVIES' })
   getMovies(): string[] {
     return ['Pulp Fiction', 'Titanic', 'Matrix'];
   }
